@@ -1,11 +1,11 @@
-Q1: Explain the order you placed your featured route and your detail route in, and what would happen if you swapped them.
+Q1: Route model binding needs two things to be true. Name both, and say what happens when only one of them is.
 
-Answer: I put my featured route above my detail route since Laravel checks routes top to bottom and stop at the first match so putting the wildcard placed above a literal will swallow it. Swapping them will cause featured page broken and give me a 404 NOT FOUND if I try to go to featured page because detail route will be swallowed the featured route and thinking the featured is id, since I do not have featured id at my movie array it will trigger the abort(404). 
+Answer: Route model binding needs two things. First, the parameter must have the model type, Movie. Second, the name must be $movie, the same as {movie} in my route. If I only use Movie but name it $record, Laravel gives me an empty movie with no data, so my pages show blank values and no error.
 
-Q2: What happens when someone visits an id that does not exist in your data, and what did you write to make that happen?
+Q2: Your Delete link gave a 404 even though the address was correct. Explain why.
 
-Answer: When someone visits an id that does not exist in my data they will see a 404 NOT FOUND in the screen. To make it happen I write if(!isset($movies[$id])) { abort(404); } in my MovieController.
+Answer: My Delete link went to /movies/1, which is the right address, but a link can only send GET. In my project, GET at  /movies/1  goes to show(), so instead of a 404 it opened Batman's detail page and nothing was deleted. Only DELETE goes to destroy(), so I changed the link to a form with  @method('DELETE').
 
-Q3: Why do your links use route names instead of typed URLs? Give one concrete thing that would break if they did not.
+Q3: old() takes a second argument on your edit form. What would break if you left it out, and what would break if you used only it?
 
-Answer: I used route names instead of typed URL since route name act like a permanent nickname of my route and this is a good practice in routing because if I used typed URL instead of route names changing actual URL in the future will be hard, I also need to change the typed URL to make it work and that is not a good practice and we need to avoid that. Forgive me for my bad English sir.
+Answer: If I leave out the second argument, like old('title'), my edit form opens empty because it does not know the movie's values. If I use only $movie->title, then when I submit a wrong edit, the form shows the old movie values again and deletes what I typed. Using both, old('title', $movie->title), keeps what I typed after an error and shows the movie's values the first time.
